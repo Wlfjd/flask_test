@@ -10,15 +10,12 @@ try:
                                 password='12341234',     # 비밀번호
                                 database='ml_db',      # 접속할 데이터베이스
                                 # 조회결과는 [{},{},{},... ] 이런 형태로 추출된다
-                                # 만약 사용 안하면 [(),(),(),..] 이런 형태로 나옴
-                                # cursorclass=my.cursors.DictCursor)
+                                cursorclass=my.cursors.DictCursor)  # 딕셔너리 커서
     )
     
-    # 쿼리 수행
-    # pymysql은 커서를 획득해서 쿼리를 수행한다 ( Rule에 따라 )
-    # 1. 커서 획득
-    with connection.cursor() as cursor:
-        # spq문 준비
+
+    with connection.cursor() as cursor:  # 커서는 with문을 벗어나면 자동으로 닫힘
+   
         sql= '''
             SELECT
                 uid,`name`
@@ -29,18 +26,11 @@ try:
             AND 
                 upw='1234';
         '''
-        # 3. sql 쿼리 수행
         cursor.execute(sql)
+        row= cursor.fetchone()  
+        # 결과확인 -> 딕셔너리 -> 이름만 추출하시오 -> '게스트'
+        print(row['name'])
 
-        # 4. 결과를 획득
-        row= cursor.fetchone()  # 결과가 한개로 나오니까 row
-
-        # 5. 결과 확인 -> 이름만 추출하시오 -> 순서가 중요, 인덱싱
-        #    튜플로 결과를 받는 것은 결과값의 순서가 바뀌지 않는 전제하에 가능
-        #    순서없는 자료구조 : 딕셔너리!! => d3
-        print(row[1])
-
-        
         pass
 except Exception as e:
     print('접속 오류',e)
