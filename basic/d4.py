@@ -3,9 +3,9 @@
 '''
 import pymysql as my
 
-def select_login():
+def select_login(uid,upw):
     connection=None
-
+    
     try:
         # 1. 접속
         connection = my.connect(host='localhost',      # 127.0.01 , 서버 주소
@@ -29,7 +29,7 @@ def select_login():
                     upw=%s;
             '''
             # excute()함수의 2번 인자가 파라미터 전달하는 자리, 튜플로 표현
-            cursor.execute(sql, ('guest','1234'))
+            cursor.execute(sql, (uid,upw))
             row= cursor.fetchone()  
             # 결과확인 -> 딕셔너리 -> 이름만 추출하시오 -> '게스트'
             print(row['name'])
@@ -46,9 +46,8 @@ def select_login():
         if connection:  
             # connection이 참이라면
             connection.close()
-        print('접속종료 성공')
 
 if __name__ == '__main__':
     # d4 개발자의 테스트 코드
     # f5개발자가 사용할 때는 작동 안함
-select_login()
+    select_login('guest',1234)
