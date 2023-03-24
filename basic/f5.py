@@ -53,14 +53,16 @@ def login():
         print(uid, upw)
         # 2. 회원 여부 쿼리
         from d4 import select_login
-        select_login(uid,upw)
-        # 3. 회원이면
+        result= select_login(uid,upw)
+        if result: # 3. 회원이면
+            pass
         # 3-1. 세션생성, 기타 필요한 조치 수행
         # 3-2. 서비스 메일 화면으로 이동
-        # 4. 회원아니면
+        else: # 4. 회원아니면
         # 4-1. 적당한 메세지 후 다시 로그인 유도
-        # redirect : 요청을 다른 URL로 forwarding한다
-        return redirect('https://www.naver.com')
+         return render_template('error.html')
+         
+        #return redirect('https://www.naver.com') # redirect : 요청을 다른 URL로 forwarding한다
 
 
 if __name__ == '__main__':
