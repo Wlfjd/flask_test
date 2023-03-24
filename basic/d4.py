@@ -1,3 +1,6 @@
+'''
+    데이터 베이스 수행 후 
+'''
 import pymysql as my
 
 connection=None
@@ -13,18 +16,19 @@ try:
                                 cursorclass=my.cursors.DictCursor)  # 딕셔너리 커서
 
     with connection.cursor() as cursor:  # 커서는 with문을 벗어나면 자동으로 닫힘
-   
+        # 파라미터는 %s 표시로 순서대로 세팅된다 '값' => ''는 자동으로 세팅된다
         sql= '''
             SELECT
-                uid,`name`
+                `name`, uid, regdate
             FROM
                 users
             WHERE  # 조건
-                uid='guest'
+                uid=%s
             AND 
-                upw='1234';
+                upw=%s;
         '''
-        cursor.execute(sql)
+        # excute()함수의 2번 인자가 파라미터 전달하는 자리, 튜플로 표현
+        cursor.execute(sql, ('guest','1234'))
         row= cursor.fetchone()  
         # 결과확인 -> 딕셔너리 -> 이름만 추출하시오 -> '게스트'
         print(row['name'])
