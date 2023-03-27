@@ -5,4 +5,4 @@ app=Flask(__name__)
 
 @app.route('/')
 def home():
-    return "home page app"
+    return "home page 커스텀"
