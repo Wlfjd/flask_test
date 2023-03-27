@@ -30,9 +30,20 @@
        이런 접근을 필터링 할 것인가? 보안의 기본사항
 '''
 
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for, session
 
 app = Flask(__name__)
+#세션을 위해서 시크릿키 지정
+app.secret_key='seserewreadfadf'  # 임의의값, 대부분 해시값 활용
+
+# 로그인을 하여 세션을 얻은 후 홈페이지를 진입해야 사이트 내용을 보여주겠다는 컨셉
+@app.route('/')
+def home():
+    if not 'uid' in session: # 세션에 uid값이 존재하는가?
+        # url_for('사용하고자 하는 URL과 연결된 함수명')
+        return redirect(url_for('login'))
+        # return redirect('login.html')  # url을 사용할 때는 하드코딩하지않는다
+    return 'hello world'
 
 # @app.route() => 기본적으로 get방식
 # 메소드 추가는 => methods=['POST',...]
@@ -56,12 +67,17 @@ def login():
         result= select_login(uid,upw)
         if result: # 3. 회원이면
             pass
-        # 3-1. 세션생성, 기타 필요한 조치 수행
-        # 3-2. 서비스 메일 화면으로 이동
+            # 세션 : 클라이언트 정보를 서버가 유지하여서, 간편하게 웹을 이용할 수 있게 도움을 줌
+                     # 단점 : 접속 유저가 많으면 서버 측 메모리에 부하가 온다 => 따라서 대안 필요 
+                     # JWT를 사용 (사이트 구성 시 인증 쪽으로 활용) 
+            # 3-1. 세션생성, 기타 필요한 조치 수행
+            session['uid'] = uid  # 키만들고 값
+            # 3-2. 서비스 메일 화면으로 이동
+            return redirect(url_for('home'))
         else: # 4. 회원아니면
-        # 4-1. 적당한 메세지 후 다시 로그인 유도
-        # render_template() => jinja2 템플릿 엔진 사용 ==> 문법 jinja2를 따라간다
-         return render_template('error.html', msg='로그인 실패')
+            # 4-1. 적당한 메세지 후 다시 로그인 유도
+            # render_template() => jinja2 템플릿 엔진 사용 ==> 문법 jinja2를 따라간다
+            return render_template('error.html', msg='로그인 실패')
 
         #return redirect('https://www.naver.com') # redirect : 요청을 다른 URL로 forwarding한다
 
