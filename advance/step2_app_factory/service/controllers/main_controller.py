@@ -4,7 +4,7 @@
     - 비즈니스 로직 : 사용자가 요청하는 주 내용을 처리하는 곳
 '''
 
-from flask import render_template, request
+from flask import render_template, request, redirect
 from service.controllers import bp_main as main
 from service.forms import FormQuestion
 
@@ -12,7 +12,9 @@ from service.forms import FormQuestion
 def home():
     return render_template('index.html')
 
-@main.route('/question') # 플라스크 객체말고 등록한 것도 라우팅 가능
+@main.route('/question', methods=['GET','POST']) # 플라스크 객체말고 등록한 것도 라우팅 가능
 def question():
     form = FormQuestion()
+    if request.method == 'POST' and form.validate_on_submit():
+        return redirect(url_for('main_bp.home'))  # 블루프린트 사용! ~/main
     return render_template('question.html', wtf=form)

@@ -14,9 +14,14 @@ def home():
     print(url_for('auth_bp.login'))
     return "auth 홈"
 
-@auth.route('/login')
+@auth.route('/login', methods=['GET','POST'])
 def login():
-    return "auth login"
+    if request.method == 'GET':
+        return render_template('login.html')
+    else:
+        # jwt 관련체크 => 정상(200), 오류(401)
+        return 'jwt 체크 완료'
+
     
 
 @auth.route('/logout') # 플라스크 객체말고 등록한 것도 라우팅 가능

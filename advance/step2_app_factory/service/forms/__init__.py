@@ -13,6 +13,6 @@ from wtforms.validators import DataRequired, Length, Email # 반드시 입력해
 class FormQuestion(FlaskForm):
     # 클래스변수만 지정
     # 변수명 => id값, name값, '제목'=>label 값이 됨
-    title= StringField('제목', validators=[DataRequired('제목 입력 필수')])
+    title= StringField('제목', validators=[DataRequired('제목 입력 필수'), Email()])
     content= TextAreaField('내용', validators=[DataRequired()])
     pass
