@@ -20,3 +20,6 @@ bp_auth=Blueprint('auth_bp',
                   template_folder='../templates/auth',  
                   static_folder='../static'        
 )
+
+bp_main
+bp_auth
